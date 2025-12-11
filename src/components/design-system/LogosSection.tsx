@@ -1,12 +1,14 @@
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
-import { Download } from "lucide-react";
+import { Download, Copy, Check } from "lucide-react";
+import { useState } from "react";
 
 const logos = [
   {
     name: "Black Text Logo (SVG)",
     filename: "musio_logo_blacks_text.svg",
     path: "/logos/musio_logo_blacks_text.svg",
+    downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/9ba7c48e-2996-4b32-487e-0f580d7a2c00/backgroundImages",
     usage: "Light backgrounds",
     format: "SVG",
     preferred: true,
@@ -15,6 +17,7 @@ const logos = [
     name: "Black Text Logo (PNG)",
     filename: "musio_logo_blacks_text.png",
     path: "/logos/musio_logo_blacks_text.png",
+    downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/44b68623-be75-4189-00b6-5c72d6101000/public",
     usage: "Light backgrounds",
     format: "PNG",
     preferred: false,
@@ -23,6 +26,7 @@ const logos = [
     name: "White Text Logo (SVG)",
     filename: "musio_logo_white_text.svg",
     path: "/logos/musio_logo_white_text.svg",
+    downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/08420e67-8671-4c97-dcdf-3ce6b9afb100/backgroundImages",
     usage: "Dark backgrounds",
     format: "SVG",
     preferred: true,
@@ -31,6 +35,7 @@ const logos = [
     name: "White Text Logo (PNG)",
     filename: "musio_logo_white_text.png",
     path: "/logos/musio_logo_white_text.png",
+    downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/756f4b4f-201f-4b83-a9ad-a635fc50b300/public",
     usage: "Dark backgrounds",
     format: "PNG",
     preferred: false,
@@ -52,16 +57,34 @@ const usageGuideCSS = `/* Recommended Usage */
 - Do not stretch or distort the logo - maintain aspect ratio
 - Provide clear space around the logo (minimum 24px)`;
 
-const handleDownload = (path: string, filename: string) => {
+const handleDownload = (url: string, filename: string) => {
   const link = document.createElement('a');
-  link.href = path;
+  link.href = url;
   link.download = filename;
+  link.target = '_blank';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
+const handleCopySVG = async (path: string, setCopied: (value: boolean) => void) => {
+  try {
+    const response = await fetch(path);
+    const svgText = await response.text();
+    await navigator.clipboard.writeText(svgText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  } catch (error) {
+    console.error('Failed to copy SVG:', error);
+  }
+};
+
 export function LogosSection() {
+  const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
+
+  const setCopied = (path: string, value: boolean) => {
+    setCopiedStates(prev => ({ ...prev, [path]: value }));
+  };
   return (
     <section className="animate-fade-in">
       <SectionHeader
@@ -110,13 +133,30 @@ export function LogosSection() {
               .filter(logo => logo.path.includes('blacks_text'))
               .map((logo) => (
                 <div key={logo.path} className="space-y-3">
-                  <div className="bg-white rounded-lg border-2 border-border p-8 flex items-center justify-center min-h-[160px]">
+                  <div className="bg-white rounded-lg border-2 border-border p-8 flex items-center justify-center min-h-[160px] relative group">
                     <img
                       src={logo.path}
                       alt="Musio Logo - Black Text"
                       className="max-w-full h-auto"
                       style={{ maxHeight: '80px' }}
                     />
+                    {logo.format === 'SVG' && (
+                      <div className="absolute top-2 right-2 group/tooltip">
+                        <button
+                          onClick={() => handleCopySVG(logo.path, (value) => setCopied(logo.path, value))}
+                          className="p-2 rounded-lg bg-musio-slate/90 text-musio-white hover:bg-musio-slate transition-all"
+                        >
+                          {copiedStates[logo.path] ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </button>
+                        <div className="absolute -top-1 right-full mr-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none">
+                          {copiedStates[logo.path] ? 'Copied!' : 'Copy SVG code'}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
@@ -130,13 +170,15 @@ export function LogosSection() {
                       </p>
                       <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <button
-                      onClick={() => handleDownload(logo.path, logo.filename)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      Download
-                    </button>
+                    <div className="flex items-center justify-center min-h-[48px] min-w-[200px]">
+                      <button
+                        onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
+                        className="flex items-center justify-center gap-2 px-5 py-2.5 min-h-[48px] min-w-[200px] rounded-full text-[0.9vw] font-semibold bg-[#fb2545] text-white border border-white hover:px-[35px] hover:py-[5px] hover:min-h-[45px] hover:min-w-[180px] hover:text-[0.8vw] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -153,13 +195,30 @@ export function LogosSection() {
               .filter(logo => logo.path.includes('white_text'))
               .map((logo) => (
                 <div key={logo.path} className="space-y-3">
-                  <div className="bg-musio-black rounded-lg border-2 border-border p-8 flex items-center justify-center min-h-[160px]">
+                  <div className="bg-musio-black rounded-lg border-2 border-border p-8 flex items-center justify-center min-h-[160px] relative group">
                     <img
                       src={logo.path}
                       alt="Musio Logo - White Text"
                       className="max-w-full h-auto"
                       style={{ maxHeight: '80px' }}
                     />
+                    {logo.format === 'SVG' && (
+                      <div className="absolute top-2 right-2 group/tooltip">
+                        <button
+                          onClick={() => handleCopySVG(logo.path, (value) => setCopied(logo.path, value))}
+                          className="p-2 rounded-lg bg-musio-white/90 text-musio-black hover:bg-musio-white transition-all"
+                        >
+                          {copiedStates[logo.path] ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </button>
+                        <div className="absolute -top-1 right-full mr-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none">
+                          {copiedStates[logo.path] ? 'Copied!' : 'Copy SVG code'}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
@@ -173,13 +232,15 @@ export function LogosSection() {
                       </p>
                       <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <button
-                      onClick={() => handleDownload(logo.path, logo.filename)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                    >
-                      <Download className="w-4 h-4" />
-                      Download
-                    </button>
+                    <div className="flex items-center justify-center min-h-[48px] min-w-[200px]">
+                      <button
+                        onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
+                        className="flex items-center justify-center gap-2 px-5 py-2.5 min-h-[48px] min-w-[200px] rounded-full text-[0.9vw] font-semibold bg-[#fb2545] text-white border border-white hover:px-[35px] hover:py-[5px] hover:min-h-[45px] hover:min-w-[180px] hover:text-[0.8vw] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

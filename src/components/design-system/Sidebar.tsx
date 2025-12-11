@@ -74,6 +74,8 @@ export function Sidebar({
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-card border border-border"
+        aria-label={isMobileOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isMobileOpen}
       >
         {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
@@ -88,6 +90,8 @@ export function Sidebar({
 
       {/* Sidebar */}
       <aside
+        role="navigation"
+        aria-label="Design system navigation"
         className={cn(
           "fixed left-0 top-0 h-screen w-72 bg-sidebar border-r border-sidebar-border flex flex-col z-40 transition-transform lg:translate-x-0",
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
