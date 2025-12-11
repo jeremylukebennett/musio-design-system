@@ -13,6 +13,8 @@ import {
   X,
   FolderOpen,
   SaveAll,
+  RectangleHorizontal,
+  Image,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +31,9 @@ const navItems: NavItem[] = [
   { id: "typography-headings", label: "Typography — Headings", icon: <Type className="w-4 h-4" /> },
   { id: "typography-paragraph-large", label: "Typography — Paragraph Large", icon: <AlignLeft className="w-4 h-4" /> },
   { id: "typography-paragraph-small", label: "Typography — Paragraph Small", icon: <AlignLeft className="w-4 h-4" /> },
+  { id: "logos", label: "Logos", icon: <Image className="w-4 h-4" /> },
   { id: "containers", label: "Containers", icon: <Square className="w-4 h-4" /> },
+  { id: "borders", label: "Borders", icon: <RectangleHorizontal className="w-4 h-4" /> },
   { id: "buttons-primary", label: "Buttons — Primary", icon: <MousePointerClick className="w-4 h-4" /> },
   { id: "buttons-secondary", label: "Buttons — Secondary", icon: <MousePointerClick className="w-4 h-4" /> },
   { id: "coming-soon", label: "Coming Soon", icon: <Lock className="w-4 h-4" />, disabled: true },
