@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Self-hosted fonts */
+@font-face {
+  font-family: "Metcon Scaled Regular";
+  src:
+    url("/fonts/font.woff2") format("woff2"),
+    url("/fonts/font.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Musio Brand Palette */
+    --musio-red: 352 96% 63%;
+    --musio-slate: 248 21% 12%;
+    --musio-gray: 248 16% 17%;
+    --musio-black: 0 0% 0%;
+    --musio-white: 0 0% 93%;
+    --cinesamples-blue: 207 97% 55%;
+    --musio-accent-mint: 160 96% 57%;
+
+    /* Semantic tokens mapped to Musio */
+    --background: 248 21% 12%;
+    --foreground: 0 0% 93%;
+
+    --card: 248 16% 17%;
+    --card-foreground: 0 0% 93%;
+
+    --popover: 248 16% 17%;
+    --popover-foreground: 0 0% 93%;
+
+    --primary: 352 96% 63%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 248 16% 22%;
+    --secondary-foreground: 0 0% 93%;
+
+    --muted: 248 16% 22%;
+    --muted-foreground: 248 10% 60%;
+
+    --accent: 160 96% 57%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 248 16% 25%;
+    --input: 248 16% 25%;
+    --ring: 352 96% 63%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: 248 21% 10%;
+    --sidebar-foreground: 0 0% 93%;
+    --sidebar-primary: 352 96% 63%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 248 16% 20%;
+    --sidebar-accent-foreground: 0 0% 93%;
+    --sidebar-border: 248 16% 20%;
+    --sidebar-ring: 352 96% 63%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--musio-slate));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--musio-gray));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+@layer utilities {
+  .text-shadow-musio {
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 1);
+  }
+
+  .text-shadow-musio-light {
+    text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.92);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
