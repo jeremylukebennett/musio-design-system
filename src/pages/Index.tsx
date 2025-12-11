@@ -9,7 +9,9 @@ import { ComingSoonSection } from "@/components/design-system/ComingSoonSection"
 import { SaveConfigDialog } from "@/components/design-system/SaveConfigDialog";
 import { LoadConfigDialog } from "@/components/design-system/LoadConfigDialog";
 import { ContainerSection } from "@/components/design-system/ContainerSection";
+import { BordersSection } from "@/components/design-system/BordersSection";
 import { TypefacesSection } from "@/components/design-system/TypefacesSection";
+import { LogosSection } from "@/components/design-system/LogosSection";
 import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
@@ -44,7 +46,9 @@ const Index = () => {
         "typography-headings",
         "typography-paragraph-large",
         "typography-paragraph-small",
+        "logos",
         "containers",
+        "borders",
         "buttons-primary",
         "buttons-secondary",
         "coming-soon",
@@ -208,6 +212,8 @@ const Index = () => {
             onUpdateParagraph={updateParagraph}
           />
 
+          <LogosSection />
+
           <ButtonsSection
             type="primary"
             button={tokens.buttons.primary}
@@ -221,6 +227,8 @@ const Index = () => {
           />
 
           <ContainerSection />
+
+          <BordersSection />
 
           <ComingSoonSection />
 
