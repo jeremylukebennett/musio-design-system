@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTokens } from "@/hooks/useTokens";
 import { Sidebar } from "@/components/design-system/Sidebar";
 import { ColorsSection } from "@/components/design-system/ColorsSection";
@@ -37,23 +37,24 @@ const Index = () => {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
 
+  // Memoize sections array to avoid recreating on every scroll event
+  const sections = useMemo(() => [
+    "colors",
+    "typefaces",
+    "typography-headings",
+    "typography-paragraph-large",
+    "typography-paragraph-small",
+    "logos",
+    "containers",
+    "borders",
+    "buttons-primary",
+    "buttons-secondary",
+    "coming-soon",
+  ], []);
+
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = [
-        "colors",
-        "typefaces",
-        "typography-headings",
-        "typography-paragraph-large",
-        "typography-paragraph-small",
-        "logos",
-        "containers",
-        "borders",
-        "buttons-primary",
-        "buttons-secondary",
-        "coming-soon",
-      ];
-
       for (const id of sections) {
         const element = document.getElementById(id);
         if (element) {
@@ -68,7 +69,7 @@ const Index = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [sections]);
 
   const handleSave = async () => {
     try {
@@ -143,7 +144,13 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded"
+      >
+        Skip to main content
+      </a>
       <Sidebar
         activeSection={activeSection}
         hasChanges={hasChanges}
@@ -168,10 +175,10 @@ const Index = () => {
         onDelete={handleDelete}
       />
 
-      <main className="lg:ml-72 min-h-screen">
+      <main id="main-content" className="lg:ml-72 min-h-screen" role="main" aria-label="Design system documentation">
         <div className="max-w-5xl mx-auto px-6 py-12 lg:px-12 lg:py-16 space-y-20">
           {/* Hero */}
-          <header className="pt-8 lg:pt-0">
+          <header className="pt-8 lg:pt-0" role="banner">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               Interactive Style Guide
@@ -233,7 +240,7 @@ const Index = () => {
           <ComingSoonSection />
 
           {/* Footer */}
-          <footer className="pt-12 border-t border-border">
+          <footer className="pt-12 border-t border-border" role="contentinfo">
             <p className="text-sm text-muted-foreground text-center">
               Musio Design System — Snapshot v1.0
             </p>

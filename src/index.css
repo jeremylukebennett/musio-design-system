@@ -5,8 +5,7 @@
 /* Self-hosted fonts */
 @font-face {
   font-family: "Metcon Scaled Regular";
-  src:
-    url("/fonts/font.woff2") format("woff2"),
+  src: url("/fonts/font.woff2") format("woff2"),
     url("/fonts/font.woff") format("woff");
   font-weight: 400;
   font-style: normal;
@@ -73,7 +72,15 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter antialiased;
+    @apply text-foreground font-inter antialiased;
+    background-color: hsl(var(--musio-slate));
+    background-image: linear-gradient(
+      135deg,
+      hsl(248 21% 14%) 0%,
+      hsl(var(--musio-slate)) 50%,
+      hsl(250 18% 20%) 100%
+    );
+    background-attachment: fixed;
   }
 
   /* Custom scrollbar for dark theme */
@@ -93,6 +100,18 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground));
+  }
+
+  /* Improved focus-visible styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 }
 
