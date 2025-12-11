@@ -1,73 +1,47 @@
-# Welcome to your Lovable project
+# Musio Design System Snapshot
 
-## Project info
+Interactive style guide and token workbench for the Musio brand. Tweak colors, typography, buttons, and container tokens, see changes instantly, and copy ready-to-use CSS from the UI.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Highlights
+- Live editing for Musio colors, typography (H1–H6 + paragraph), button states (primary/secondary, default/hover), container radius scale, and typefaces.
+- Code blocks surface generated CSS variables and component styles as you edit.
+- Save, save-as, load, and reset flows; tokens persist to Firestore when reachable and fall back to localStorage if not.
+- Built with Vite, React, TypeScript, Tailwind CSS, shadcn/ui, and React Query.
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Getting Started
+Prerequisites: Node.js 18+ and npm.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Optional scripts:
+- `npm run build` – production bundle
+- `npm run preview` – serve the production build locally
+- `npm run lint` – lint the codebase
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Persistence & Data Flow
+- Canonical tokens live in `src/lib/tokens.ts` (`canonicalTokens`).
+- Runtime state comes from `useTokens`:
+  - Loads from Firestore (`tokens/musio-design-tokens` and `saved-configs`) when the configured project is reachable.
+  - Falls back to `localStorage` (`musio-tokens`) if Firestore fails.
+  - Save/Save As updates Firestore and local storage; Reset restores canonical tokens.
+- Firebase configuration is defined in `src/lib/firebase.ts` (project: `musio-token-studio`).
 
-**Use GitHub Codespaces**
+## UI Map
+- Colors: edit the palette, add tokens, and copy generated CSS variables.
+- Typefaces: primary UI and accent font samples with adjustable families, line heights, and labels.
+- Typography: adjust H1–H6 and paragraph tokens with live preview and text shadow controls.
+- Buttons: tune primary/secondary default and hover states; copy generated CSS for each class.
+- Containers: radius scale and shell reference used in Musio pricing modules.
+- Sidebar: save, save as, load, and reset controls, plus section quick links.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
+- `src/pages/Index.tsx` – main experience and layout
+- `src/components/design-system/` – individual token editors and preview sections
+- `src/hooks/useTokens.ts` – token state, persistence, and saved-config logic
+- `src/lib/` – token definitions and Firebase setup
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Deployment
+Build the static bundle (`npm run build`) and host the `dist/` directory on your preferred static host (e.g., Vercel, Netlify, S3/CloudFront). No server is required beyond Firestore access for persistence.
