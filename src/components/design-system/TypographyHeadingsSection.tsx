@@ -3,7 +3,7 @@ import { TypographyToken, generateTypographyCSS } from "@/lib/tokens";
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
 import { TokenInput } from "./TokenInput";
-import { normalizeFontFamily, isFontAvailable } from "@/lib/fontUtils";
+import { normalizeFontFamily, checkAndLoadFont, type FontLoadingState } from "@/lib/fontUtils";
 
 interface HeadingLevel {
   key: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -47,11 +47,11 @@ export function TypographyHeadingsSection({
       )
   );
   const [hoveredKey, setHoveredKey] = useState<HeadingLevel["key"] | null>(null);
-  const [unrecognizedFonts, setUnrecognizedFonts] = useState<Record<HeadingLevel["key"], boolean>>(
+  const [fontStates, setFontStates] = useState<Record<HeadingLevel["key"], FontLoadingState>>(
     () =>
       headingLevels.reduce(
-        (acc, { key }) => ({ ...acc, [key]: false }),
-        {} as Record<HeadingLevel["key"], boolean>
+        (acc, { key }) => ({ ...acc, [key]: 'available' as FontLoadingState }),
+        {} as Record<HeadingLevel["key"], FontLoadingState>
       )
   );
 
@@ -65,15 +65,22 @@ export function TypographyHeadingsSection({
     setDrafts((prev) => ({ ...prev, [key]: "" }));
   };
 
-  // Check if fonts are available whenever headings change
+  // Check and load fonts whenever headings change
   useEffect(() => {
-    headingLevels.forEach(({ key }) => {
+    headingLevels.forEach(async ({ key }) => {
       const fontFamily = headings[key]?.fontFamily;
       if (fontFamily) {
-        const isAvailable = isFontAvailable(fontFamily);
-        setUnrecognizedFonts((prev) => ({
+        // Set loading state
+        setFontStates((prev) => ({
           ...prev,
-          [key]: !isAvailable,
+          [key]: 'loading',
+        }));
+
+        // Check and load font
+        const state = await checkAndLoadFont(fontFamily);
+        setFontStates((prev) => ({
+          ...prev,
+          [key]: state,
         }));
       }
     });
@@ -157,7 +164,17 @@ export function TypographyHeadingsSection({
                       }}
                       type="text"
                     />
-                    {unrecognizedFonts[key] && (
+                    {fontStates[key] === 'loading' && (
+                      <div className="absolute -top-1 -right-1 group/tooltip">
+                        <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-xs cursor-help animate-pulse">
+                          ⏳
+                        </div>
+                        <div className="absolute top-full right-0 mt-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
+                          Loading from Google Fonts...
+                        </div>
+                      </div>
+                    )}
+                    {fontStates[key] === 'unavailable' && (
                       <div className="absolute -top-1 -right-1 group/tooltip">
                         <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-xs cursor-help">
                           😖

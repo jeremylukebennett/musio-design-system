@@ -3,7 +3,7 @@ import { TypographyToken, generateTypographyCSS } from "@/lib/tokens";
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
 import { TokenInput } from "./TokenInput";
-import { normalizeFontFamily, isFontAvailable } from "@/lib/fontUtils";
+import { normalizeFontFamily, checkAndLoadFont, type FontLoadingState } from "@/lib/fontUtils";
 
 interface TypographyParagraphSectionProps {
   variant: "large" | "small";
@@ -21,18 +21,22 @@ export function TypographyParagraphSection({
   );
   const [draft, setDraft] = useState("");
   const [hovered, setHovered] = useState(false);
-  const [isFontUnrecognized, setIsFontUnrecognized] = useState(false);
+  const [fontState, setFontState] = useState<FontLoadingState>('available');
 
   const shadow = paragraph.textShadow;
   const isLarge = variant === "large";
 
-  // Check if font is available whenever paragraph font changes
+  // Check and load font whenever paragraph font changes
   useEffect(() => {
-    const fontFamily = paragraph.fontFamily;
-    if (fontFamily) {
-      const isAvailable = isFontAvailable(fontFamily);
-      setIsFontUnrecognized(!isAvailable);
-    }
+    const loadFont = async () => {
+      const fontFamily = paragraph.fontFamily;
+      if (fontFamily) {
+        setFontState('loading');
+        const state = await checkAndLoadFont(fontFamily);
+        setFontState(state);
+      }
+    };
+    loadFont();
   }, [paragraph.fontFamily]);
 
   const previewStyle: CSSProperties = {
@@ -115,7 +119,17 @@ export function TypographyParagraphSection({
                 }}
                 type="text"
               />
-              {isFontUnrecognized && (
+              {fontState === 'loading' && (
+                <div className="absolute -top-1 -right-1 group/tooltip">
+                  <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-xs cursor-help animate-pulse">
+                    ⏳
+                  </div>
+                  <div className="absolute top-full right-0 mt-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
+                    Loading from Google Fonts...
+                  </div>
+                </div>
+              )}
+              {fontState === 'unavailable' && (
                 <div className="absolute -top-1 -right-1 group/tooltip">
                   <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-xs cursor-help">
                     😖

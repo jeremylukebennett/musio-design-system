@@ -69,3 +69,86 @@ export function isFontAvailable(fontFamily: string): boolean {
   // (the fallback monospace wasn't used)
   return testWidth !== baselineWidth;
 }
+
+/**
+ * Loads a font from Google Fonts by dynamically adding a link tag
+ * Returns a promise that resolves when the font is loaded or rejects if it fails
+ *
+ * @param fontFamily - The font family name to load from Google Fonts
+ * @returns Promise that resolves to true if loaded, false if failed
+ */
+export async function loadGoogleFont(fontFamily: string): Promise<boolean> {
+  if (!fontFamily || fontFamily === 'Inter') {
+    return true; // Default font, no need to load
+  }
+
+  // Check if already loaded
+  if (isFontAvailable(fontFamily)) {
+    return true;
+  }
+
+  // Convert font family to Google Fonts URL format
+  // e.g., "Roboto Mono" -> "Roboto+Mono"
+  const googleFontName = fontFamily.replace(/\s+/g, '+');
+  const fontUrl = `https://fonts.googleapis.com/css2?family=${googleFontName}:wght@400;500;600;700&display=swap`;
+
+  // Check if this font is already being loaded
+  const existingLink = document.querySelector(`link[href="${fontUrl}"]`);
+  if (existingLink) {
+    // Wait a bit and check if it's available
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return isFontAvailable(fontFamily);
+  }
+
+  // Create and add the link tag
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = fontUrl;
+
+  return new Promise((resolve) => {
+    link.onload = async () => {
+      // Wait a moment for the font to be fully loaded
+      await new Promise(r => setTimeout(r, 300));
+      const isAvailable = isFontAvailable(fontFamily);
+      resolve(isAvailable);
+    };
+
+    link.onerror = () => {
+      resolve(false); // Font not found on Google Fonts
+    };
+
+    document.head.appendChild(link);
+
+    // Timeout after 5 seconds
+    setTimeout(() => {
+      resolve(isFontAvailable(fontFamily));
+    }, 5000);
+  });
+}
+
+/**
+ * Font loading state type
+ */
+export type FontLoadingState = 'available' | 'loading' | 'unavailable';
+
+/**
+ * Checks font availability and attempts to load from Google Fonts if needed
+ * Returns the current state of the font
+ *
+ * @param fontFamily - The font family name to check/load
+ * @returns Promise that resolves to the font state
+ */
+export async function checkAndLoadFont(fontFamily: string): Promise<FontLoadingState> {
+  if (!fontFamily || fontFamily === 'Inter') {
+    return 'available';
+  }
+
+  // Check if already available locally
+  if (isFontAvailable(fontFamily)) {
+    return 'available';
+  }
+
+  // Try loading from Google Fonts
+  const loaded = await loadGoogleFont(fontFamily);
+  return loaded ? 'available' : 'unavailable';
+}
