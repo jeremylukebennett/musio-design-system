@@ -170,10 +170,10 @@ export function LogosSection() {
                       </p>
                       <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <div className="flex items-center justify-center min-h-[48px] min-w-[200px]">
+                    <div className="flex items-center justify-center min-h-[48px]">
                       <button
                         onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
-                        className="flex items-center justify-center gap-2 px-5 py-2.5 min-h-[48px] min-w-[200px] rounded-full text-[0.9vw] font-semibold bg-[#fb2545] text-white border border-white hover:px-[35px] hover:py-[5px] hover:min-h-[45px] hover:min-w-[180px] hover:text-[0.8vw] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                        className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
                       >
                         <Download className="w-4 h-4" />
                         Download
@@ -232,10 +232,10 @@ export function LogosSection() {
                       </p>
                       <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <div className="flex items-center justify-center min-h-[48px] min-w-[200px]">
+                    <div className="flex items-center justify-center min-h-[48px]">
                       <button
                         onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
-                        className="flex items-center justify-center gap-2 px-5 py-2.5 min-h-[48px] min-w-[200px] rounded-full text-[0.9vw] font-semibold bg-[#fb2545] text-white border border-white hover:px-[35px] hover:py-[5px] hover:min-h-[45px] hover:min-w-[180px] hover:text-[0.8vw] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                        className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
                       >
                         <Download className="w-4 h-4" />
                         Download
