@@ -1,9 +1,9 @@
-import { useState, type CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { TypographyToken, generateTypographyCSS } from "@/lib/tokens";
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
 import { TokenInput } from "./TokenInput";
-import { normalizeFontFamily } from "@/lib/fontUtils";
+import { normalizeFontFamily, isFontAvailable } from "@/lib/fontUtils";
 
 interface HeadingLevel {
   key: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -47,6 +47,13 @@ export function TypographyHeadingsSection({
       )
   );
   const [hoveredKey, setHoveredKey] = useState<HeadingLevel["key"] | null>(null);
+  const [unrecognizedFonts, setUnrecognizedFonts] = useState<Record<HeadingLevel["key"], boolean>>(
+    () =>
+      headingLevels.reduce(
+        (acc, { key }) => ({ ...acc, [key]: false }),
+        {} as Record<HeadingLevel["key"], boolean>
+      )
+  );
 
   const handleTextChange = (key: HeadingLevel["key"], value: string) => {
     setDrafts((prev) => ({ ...prev, [key]: value }));
@@ -57,6 +64,20 @@ export function TypographyHeadingsSection({
     setHoveredKey((prev) => (prev === key ? null : prev));
     setDrafts((prev) => ({ ...prev, [key]: "" }));
   };
+
+  // Check if fonts are available whenever headings change
+  useEffect(() => {
+    headingLevels.forEach(({ key }) => {
+      const fontFamily = headings[key]?.fontFamily;
+      if (fontFamily) {
+        const isAvailable = isFontAvailable(fontFamily);
+        setUnrecognizedFonts((prev) => ({
+          ...prev,
+          [key]: !isAvailable,
+        }));
+      }
+    });
+  }, [headings]);
 
   return (
     <section className="animate-fade-in">
@@ -126,15 +147,27 @@ export function TypographyHeadingsSection({
 
               <div className="p-6 bg-musio-gray/30">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
-                  <TokenInput
-                    label="Font Family"
-                    value={token.fontFamily}
-                    onChange={(v) => {
-                      const normalized = normalizeFontFamily(v as string);
-                      onUpdateHeading(key, { fontFamily: normalized });
-                    }}
-                    type="text"
-                  />
+                  <div className="relative">
+                    <TokenInput
+                      label="Font Family"
+                      value={token.fontFamily}
+                      onChange={(v) => {
+                        const normalized = normalizeFontFamily(v as string);
+                        onUpdateHeading(key, { fontFamily: normalized });
+                      }}
+                      type="text"
+                    />
+                    {unrecognizedFonts[key] && (
+                      <div className="absolute -top-1 -right-1 group/tooltip">
+                        <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-xs cursor-help">
+                          😖
+                        </div>
+                        <div className="absolute top-full right-0 mt-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
+                          Font unrecognized 😖
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <TokenInput
                     label="Font Size"
                     value={token.fontSize}

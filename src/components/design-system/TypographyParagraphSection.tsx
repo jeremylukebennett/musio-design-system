@@ -1,9 +1,9 @@
-import { useState, type CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { TypographyToken, generateTypographyCSS } from "@/lib/tokens";
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
 import { TokenInput } from "./TokenInput";
-import { normalizeFontFamily } from "@/lib/fontUtils";
+import { normalizeFontFamily, isFontAvailable } from "@/lib/fontUtils";
 
 interface TypographyParagraphSectionProps {
   variant: "large" | "small";
@@ -21,9 +21,19 @@ export function TypographyParagraphSection({
   );
   const [draft, setDraft] = useState("");
   const [hovered, setHovered] = useState(false);
+  const [isFontUnrecognized, setIsFontUnrecognized] = useState(false);
 
   const shadow = paragraph.textShadow;
   const isLarge = variant === "large";
+
+  // Check if font is available whenever paragraph font changes
+  useEffect(() => {
+    const fontFamily = paragraph.fontFamily;
+    if (fontFamily) {
+      const isAvailable = isFontAvailable(fontFamily);
+      setIsFontUnrecognized(!isAvailable);
+    }
+  }, [paragraph.fontFamily]);
 
   const previewStyle: CSSProperties = {
     fontFamily: `"${paragraph.fontFamily}", sans-serif`,
@@ -95,15 +105,27 @@ export function TypographyParagraphSection({
 
         <div className="p-6 bg-musio-gray/30">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
-            <TokenInput
-              label="Font Family"
-              value={paragraph.fontFamily}
-              onChange={(v) => {
-                const normalized = normalizeFontFamily(v as string);
-                onUpdateParagraph(variant, { fontFamily: normalized });
-              }}
-              type="text"
-            />
+            <div className="relative">
+              <TokenInput
+                label="Font Family"
+                value={paragraph.fontFamily}
+                onChange={(v) => {
+                  const normalized = normalizeFontFamily(v as string);
+                  onUpdateParagraph(variant, { fontFamily: normalized });
+                }}
+                type="text"
+              />
+              {isFontUnrecognized && (
+                <div className="absolute -top-1 -right-1 group/tooltip">
+                  <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center text-xs cursor-help">
+                    😖
+                  </div>
+                  <div className="absolute top-full right-0 mt-2 px-3 py-1.5 rounded-lg bg-musio-slate text-musio-white text-xs font-medium whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
+                    Font unrecognized 😖
+                  </div>
+                </div>
+              )}
+            </div>
             <TokenInput
               label="Font Size"
               value={paragraph.fontSize}
