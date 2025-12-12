@@ -62,7 +62,7 @@ export function TypographyHeadingsSection({
       <SectionHeader
         id="typography-headings"
         title="Typography — Headings"
-        description="Heading styles from H1 to H6 with Inter font family"
+        description="Heading styles from H1 to H6 using Inter Semi Bold font family"
       />
 
       <div className="space-y-8">
@@ -90,7 +90,7 @@ export function TypographyHeadingsSection({
                     {label}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    {token.fontSize}px / {token.fontWeight} weight
+                    {token.fontFamily} · {token.fontWeight === 600 ? 'Semi Bold' : token.fontWeight} · {token.fontSize}px
                   </span>
                 </div>
                 <div
