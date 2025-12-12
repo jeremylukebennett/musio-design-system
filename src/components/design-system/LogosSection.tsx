@@ -158,48 +158,26 @@ export function LogosSection() {
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-foreground">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground flex items-center gap-2">
                         {logo.format}
+                        {logo.preferred && (
+                          <span className="px-2 py-0.5 rounded bg-primary/15 text-primary text-xs font-semibold">
+                            Preferred
+                          </span>
+                        )}
                       </p>
-                      {logo.preferred && (
-                        <span className="px-2 py-0.5 rounded bg-primary/15 text-primary text-xs font-semibold">
-                          Preferred
-                        </span>
-                      )}
-                      <span className="text-xs text-muted-foreground">• {logo.usage}</span>
+                      <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                      {logo.format === 'SVG' && (
-                        <div className="flex items-center justify-center min-h-[48px]">
-                          <button
-                            onClick={() => handleCopySVG(logo.path, (value) => setCopied(logo.path, value))}
-                            className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-white text-[#fb2545] border border-[#fb2545] hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-[#fb2545] hover:text-white hover:border-white transition-all duration-[250ms] ease-out"
-                          >
-                            {copiedStates[logo.path] ? (
-                              <>
-                                <Check className="w-4 h-4" />
-                                Copied!
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-4 h-4" />
-                                Copy SVG Code
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      )}
-                      <div className="flex items-center justify-center min-h-[48px]">
-                        <button
-                          onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
-                          className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
-                      </div>
+                    <div className="flex items-center justify-center min-h-[48px]">
+                      <button
+                        onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
+                        className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -242,48 +220,26 @@ export function LogosSection() {
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-foreground">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-foreground flex items-center gap-2">
                         {logo.format}
+                        {logo.preferred && (
+                          <span className="px-2 py-0.5 rounded bg-primary/15 text-primary text-xs font-semibold">
+                            Preferred
+                          </span>
+                        )}
                       </p>
-                      {logo.preferred && (
-                        <span className="px-2 py-0.5 rounded bg-primary/15 text-primary text-xs font-semibold">
-                          Preferred
-                        </span>
-                      )}
-                      <span className="text-xs text-muted-foreground">• {logo.usage}</span>
+                      <p className="text-xs text-muted-foreground">{logo.usage}</p>
                     </div>
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                      {logo.format === 'SVG' && (
-                        <div className="flex items-center justify-center min-h-[48px]">
-                          <button
-                            onClick={() => handleCopySVG(logo.path, (value) => setCopied(logo.path, value))}
-                            className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-white text-[#fb2545] border border-[#fb2545] hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-[#fb2545] hover:text-white hover:border-white transition-all duration-[250ms] ease-out"
-                          >
-                            {copiedStates[logo.path] ? (
-                              <>
-                                <Check className="w-4 h-4" />
-                                Copied!
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-4 h-4" />
-                                Copy SVG Code
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      )}
-                      <div className="flex items-center justify-center min-h-[48px]">
-                        <button
-                          onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
-                          className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download
-                        </button>
-                      </div>
+                    <div className="flex items-center justify-center min-h-[48px]">
+                      <button
+                        onClick={() => handleDownload(logo.downloadUrl, logo.filename)}
+                        className="flex items-center justify-center gap-2 py-[10px] px-[20px] min-h-[48px] min-w-[200px] rounded-[100px] text-sm font-semibold bg-[#fb2545] text-white border border-white hover:py-[5px] hover:px-[35px] hover:min-h-[45px] hover:bg-white hover:text-[#fb2545] hover:border-[#fb2545] transition-all duration-[250ms] ease-out"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download
+                      </button>
                     </div>
                   </div>
                 </div>
