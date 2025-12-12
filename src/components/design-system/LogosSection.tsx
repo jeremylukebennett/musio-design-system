@@ -7,7 +7,7 @@ const logos = [
   {
     name: "Black Text Logo (SVG)",
     filename: "musio_logo_blacks_text.svg",
-    path: "/logos/musio_logo_blacks_text.svg",
+    path: `${import.meta.env.BASE_URL}logos/musio_logo_blacks_text.svg`,
     downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/9ba7c48e-2996-4b32-487e-0f580d7a2c00/backgroundImages",
     usage: "Light backgrounds",
     format: "SVG",
@@ -16,7 +16,7 @@ const logos = [
   {
     name: "Black Text Logo (PNG)",
     filename: "musio_logo_blacks_text.png",
-    path: "/logos/musio_logo_blacks_text.png",
+    path: `${import.meta.env.BASE_URL}logos/musio_logo_blacks_text.png`,
     downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/44b68623-be75-4189-00b6-5c72d6101000/public",
     usage: "Light backgrounds",
     format: "PNG",
@@ -25,7 +25,7 @@ const logos = [
   {
     name: "White Text Logo (SVG)",
     filename: "musio_logo_white_text.svg",
-    path: "/logos/musio_logo_white_text.svg",
+    path: `${import.meta.env.BASE_URL}logos/musio_logo_white_text.svg`,
     downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/08420e67-8671-4c97-dcdf-3ce6b9afb100/backgroundImages",
     usage: "Dark backgrounds",
     format: "SVG",
@@ -34,7 +34,7 @@ const logos = [
   {
     name: "White Text Logo (PNG)",
     filename: "musio_logo_white_text.png",
-    path: "/logos/musio_logo_white_text.png",
+    path: `${import.meta.env.BASE_URL}logos/musio_logo_white_text.png`,
     downloadUrl: "https://imagedelivery.net/r8lA-oPZomLbqo6uIxzOGA/756f4b4f-201f-4b83-a9ad-a635fc50b300/public",
     usage: "Dark backgrounds",
     format: "PNG",
@@ -255,7 +255,7 @@ export function LogosSection() {
               <p className="text-sm font-medium text-foreground">Light Background Example</p>
               <div className="bg-white rounded-lg border-2 border-border p-12 flex items-center justify-center">
                 <img
-                  src="/logos/musio_logo_blacks_text.svg"
+                  src={`${import.meta.env.BASE_URL}logos/musio_logo_blacks_text.svg`}
                   alt="Musio Logo on Light Background"
                   className="max-w-full h-auto"
                   style={{ maxHeight: '60px' }}
@@ -267,7 +267,7 @@ export function LogosSection() {
               <p className="text-sm font-medium text-foreground">Dark Background Example</p>
               <div className="bg-musio-black rounded-lg border-2 border-border p-12 flex items-center justify-center">
                 <img
-                  src="/logos/musio_logo_white_text.svg"
+                  src={`${import.meta.env.BASE_URL}logos/musio_logo_white_text.svg`}
                   alt="Musio Logo on Dark Background"
                   className="max-w-full h-auto"
                   style={{ maxHeight: '60px' }}
