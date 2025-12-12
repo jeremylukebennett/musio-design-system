@@ -3,6 +3,7 @@ import { TypographyToken, generateTypographyCSS } from "@/lib/tokens";
 import { SectionHeader } from "./SectionHeader";
 import { CodeBlock } from "./CodeBlock";
 import { TokenInput } from "./TokenInput";
+import { normalizeFontFamily } from "@/lib/fontUtils";
 
 interface TypographyParagraphSectionProps {
   variant: "large" | "small";
@@ -93,7 +94,16 @@ export function TypographyParagraphSection({
         </div>
 
         <div className="p-6 bg-musio-gray/30">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
+            <TokenInput
+              label="Font Family"
+              value={paragraph.fontFamily}
+              onChange={(v) => {
+                const normalized = normalizeFontFamily(v as string);
+                onUpdateParagraph(variant, { fontFamily: normalized });
+              }}
+              type="text"
+            />
             <TokenInput
               label="Font Size"
               value={paragraph.fontSize}
