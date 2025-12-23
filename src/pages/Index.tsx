@@ -23,6 +23,8 @@ const Index = () => {
     currentConfigName,
     updateColor,
     addColor,
+    deleteColor,
+    updateColorFull,
     updateHeading,
     updateParagraph,
     updateButton,
@@ -197,6 +199,8 @@ const Index = () => {
             colors={tokens.colors}
             onUpdateColor={updateColor}
             onAddColor={addColor}
+            onDeleteColor={deleteColor}
+            onUpdateColorFull={updateColorFull}
             tokens={tokens}
           />
 

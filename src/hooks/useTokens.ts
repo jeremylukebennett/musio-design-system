@@ -78,6 +78,23 @@ export function useTokens() {
     setHasChanges(true);
   }, []);
 
+  const deleteColor = useCallback((index: number) => {
+    setTokens((prev) => ({
+      ...prev,
+      colors: prev.colors.filter((_, i) => i !== index),
+    }));
+    setHasChanges(true);
+  }, []);
+
+  const updateColorFull = useCallback((index: number, color: { name: string; value: string }) => {
+    setTokens((prev) => {
+      const newColors = [...prev.colors];
+      newColors[index] = color;
+      return { ...prev, colors: newColors };
+    });
+    setHasChanges(true);
+  }, []);
+
   const updateHeading = useCallback(
     (level: "h1" | "h2" | "h3" | "h4" | "h5" | "h6", updates: Partial<TypographyToken>) => {
       setTokens((prev) => ({
@@ -245,6 +262,8 @@ export function useTokens() {
     currentConfigName,
     updateColor,
     addColor,
+    deleteColor,
+    updateColorFull,
     updateHeading,
     updateParagraph,
     updateButton,

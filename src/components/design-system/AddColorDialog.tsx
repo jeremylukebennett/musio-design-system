@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,11 +14,24 @@ interface AddColorDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (color: { name: string; value: string }) => void;
+  editingColor?: { name: string; value: string } | null;
 }
 
-export function AddColorDialog({ open, onOpenChange, onSave }: AddColorDialogProps) {
+export function AddColorDialog({ open, onOpenChange, onSave, editingColor }: AddColorDialogProps) {
   const [name, setName] = useState("");
   const [value, setValue] = useState("#000000");
+
+  const isEditing = !!editingColor;
+
+  useEffect(() => {
+    if (open && editingColor) {
+      setName(editingColor.name);
+      setValue(editingColor.value);
+    } else if (!open) {
+      setName("");
+      setValue("#000000");
+    }
+  }, [open, editingColor]);
 
   const handleSave = () => {
     if (name.trim() && value.trim()) {
@@ -42,7 +55,9 @@ export function AddColorDialog({ open, onOpenChange, onSave }: AddColorDialogPro
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="bg-card border-border">
         <DialogHeader>
-          <DialogTitle className="text-foreground">Add Color Token</DialogTitle>
+          <DialogTitle className="text-foreground">
+            {isEditing ? "Edit Color Token" : "Add Color Token"}
+          </DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
@@ -94,11 +109,11 @@ export function AddColorDialog({ open, onOpenChange, onSave }: AddColorDialogPro
           <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleSave}
             disabled={!name.trim() || !value.trim()}
           >
-            Add Color
+            {isEditing ? "Save Changes" : "Add Color"}
           </Button>
         </DialogFooter>
       </DialogContent>
